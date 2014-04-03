@@ -331,6 +331,7 @@ switch cfg.method
     elseif input_seg
       tmpcfg = [];
       tmpcfg.numvertices = cfg.numvertices;
+      tmpcfg.method      = ft_getopt(cfg, 'method', 'projectmesh');
       if ~isempty(cfg.tissue)
         % extract the specified surface
         tmpcfg.tissue = cfg.tissue;

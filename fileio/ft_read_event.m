@@ -1541,6 +1541,39 @@ switch eventformat
       end
     end
     
+  case {'artemis123_meg'}
+    
+    if isempty(hdr)
+      hdr = ft_read_header(filename, 'headerformat', headerformat);
+    end
+
+    iscontinuous    = 1;
+    isaverage       = 0;
+    isepoched       = 0;
+
+    if iscontinuous
+      analogindx = find(strcmp(ft_chantype(hdr), 'analog trigger'));
+      binaryindx = find(strcmp(ft_chantype(hdr), 'digital trigger'));
+      
+      if ~isempty(binaryindx)
+        trigger = read_trigger(filename, 'header', hdr, 'dataformat', dataformat, 'begsample', flt_minsample, 'endsample', flt_maxsample, 'chanindx', binaryindx, 'detectflank', detectflank, 'trigshift', trigshift, 'denoise', true);
+        event   = appendevent(event, trigger);
+      end
+      if ~isempty(analogindx)
+        % add the triggers to the event structure based on trigger channels with the name "STI xxx"
+        % there are some issues with noise on these analog trigger
+        % channels, on older systems only
+        % read the trigger channel and do flank detection
+        trigger = read_trigger(filename, 'header', hdr, 'dataformat', dataformat, 'begsample', flt_minsample, 'endsample', flt_maxsample, 'chanindx', analogindx, 'detectflank', detectflank, 'trigshift', trigshift, 'denoise', true);
+        event   = appendevent(event, trigger);
+      end
+      
+    elseif isaverage
+      error('Support for averaged artemis123 data is not yet implemented.')
+    elseif isepoched
+      error('Support for epoched artemis123 data is not yet implemented.')
+    end
+    
   case {'neuralynx_ttl' 'neuralynx_bin' 'neuralynx_dma' 'neuralynx_sdma'}
     if isempty(hdr)
       hdr = ft_read_header(filename);
