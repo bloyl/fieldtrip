@@ -2273,7 +2273,7 @@ switch headerformat
     end
 
   case 'artemis123_meg'
-    hdr = readArtemisHdr(filename);
+    hdr = read_artemis123_header(filename);
 
   case 'riff_wave'
     [y, fs, nbits, opts] = wavread(filename, 1); % read one sample
