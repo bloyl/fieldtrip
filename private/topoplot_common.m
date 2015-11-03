@@ -70,7 +70,7 @@ if Ndata>1 && ~isnumeric(varargin{end})
 end
 
 data = varargin{indx};
-data = ft_checkdata(data, 'datatype', {'comp', 'timelock', 'freq'});
+data = ft_checkdata(data, 'datatype', {'raw', 'comp', 'timelock', 'freq'});
 
 % check for option-values to be renamed
 cfg = ft_checkconfig(cfg, 'renamedval', {'electrodes',     'dotnum',      'numbers'});
